@@ -4,11 +4,29 @@ const closeMenuButton = document.querySelector('[data-menu-close]');
 const toast = document.querySelector('[data-toast]');
 const cartCountElements = document.querySelectorAll('[data-cart-count]');
 
-let cartCount = Number(localStorage.getItem('pouchieCartCount') || 0);
+const CART_STORAGE_KEY = 'pouchieCart';
+
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+}
+
+function getCartCount() {
+  return getCart().reduce((total, item) => total + item.quantity, 0);
+}
 
 function updateCartCount() {
+  const count = getCartCount();
+
   cartCountElements.forEach((el) => {
-    el.textContent = String(cartCount);
+    el.textContent = String(count);
   });
 }
 
@@ -23,6 +41,132 @@ function showToast(message) {
   }, 2500);
 }
 
+function addToCart(product) {
+  const cart = getCart();
+  const existingProduct = cart.find((item) => item.id === product.id);
+
+  if (existingProduct) {
+    existingProduct.quantity += 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      color: product.color,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+  showToast('Produkt byl přidán do košíku.');
+}
+
+function removeFromCart(productId) {
+  const cart = getCart().filter((item) => item.id !== productId);
+  saveCart(cart);
+  updateCartCount();
+  renderCartPage();
+  showToast('Produkt byl odebrán z košíku.');
+}
+
+function changeQuantity(productId, change) {
+  const cart = getCart();
+  const item = cart.find((product) => product.id === productId);
+
+  if (!item) return;
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+
+  saveCart(cart);
+  updateCartCount();
+  renderCartPage();
+}
+
+function renderCartPage() {
+  const cartItemsContainer = document.querySelector('[data-cart-items]');
+  const cartEmpty = document.querySelector('[data-cart-empty]');
+  const cartLayout = document.querySelector('[data-cart-layout]');
+  const cartTotalItems = document.querySelector('[data-cart-total-items]');
+
+  if (!cartItemsContainer || !cartEmpty || !cartLayout) return;
+
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    cartEmpty.style.display = 'block';
+    cartLayout.style.display = 'none';
+    cartItemsContainer.innerHTML = '';
+
+    if (cartTotalItems) {
+      cartTotalItems.textContent = '0';
+    }
+
+    return;
+  }
+
+  cartEmpty.style.display = 'none';
+  cartLayout.style.display = 'grid';
+
+  cartItemsContainer.innerHTML = cart.map((item) => {
+    return `
+      <tr>
+        <td>
+          <div class="cart-item-info">
+            <img class="cart-item-image" src="${item.image}" alt="${item.name} ${item.color}">
+
+            <div>
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-variant">${item.color}</div>
+              <button class="cart-remove-btn" type="button" data-remove-from-cart="${item.id}">Odebrat</button>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          <div class="qty-control">
+            <button class="qty-btn" type="button" data-qty-minus="${item.id}">−</button>
+            <input class="qty-input" value="${item.quantity}" type="number" min="1" readonly>
+            <button class="qty-btn" type="button" data-qty-plus="${item.id}">+</button>
+          </div>
+        </td>
+
+        <td>${item.price}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+  if (cartTotalItems) {
+    cartTotalItems.textContent = String(totalItems);
+  }
+
+  document.querySelectorAll('[data-remove-from-cart]').forEach((button) => {
+    button.addEventListener('click', () => {
+      removeFromCart(button.dataset.removeFromCart);
+    });
+  });
+
+  document.querySelectorAll('[data-qty-minus]').forEach((button) => {
+    button.addEventListener('click', () => {
+      changeQuantity(button.dataset.qtyMinus, -1);
+    });
+  });
+
+  document.querySelectorAll('[data-qty-plus]').forEach((button) => {
+    button.addEventListener('click', () => {
+      changeQuantity(button.dataset.qtyPlus, 1);
+    });
+  });
+}
+
 openMenuButton?.addEventListener('click', () => {
   mobileMenu?.classList.add('open');
 });
@@ -33,10 +177,15 @@ closeMenuButton?.addEventListener('click', () => {
 
 document.querySelectorAll('[data-add-to-cart]').forEach((button) => {
   button.addEventListener('click', () => {
-    cartCount += 1;
-    localStorage.setItem('pouchieCartCount', String(cartCount));
-    updateCartCount();
-    showToast('Produkt byl přidán do košíku. Košík je zatím pouze ukázkový.');
+    const product = {
+      id: button.dataset.productId,
+      name: button.dataset.productName,
+      color: button.dataset.productColor,
+      price: button.dataset.productPrice,
+      image: button.dataset.productImage
+    };
+
+    addToCart(product);
   });
 });
 
@@ -54,3 +203,4 @@ document.querySelectorAll('[data-placeholder-checkout]').forEach((button) => {
 });
 
 updateCartCount();
+renderCartPage();
