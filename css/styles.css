@@ -1339,3 +1339,76 @@ textarea { resize: vertical; min-height: 16rem; }
     grid-template-columns: 1fr;
   }
 }
+/* =============================================
+   POUCHIE HOMEPAGE PRODUCT GRID FINAL FIX
+   ============================================= */
+
+.pouchie-product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 1.2rem !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+.pouchie-product-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: block !important;
+}
+
+.pouchie-product-image {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1.35 !important;
+  background: #2f2f2f !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.pouchie-product-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 1.4rem !important;
+  display: block !important;
+  background: #2f2f2f !important;
+}
+
+.pouchie-product-info {
+  padding-top: 1.4rem !important;
+}
+
+.pouchie-product-info h3 {
+  font-family: var(--font-body) !important;
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+  margin: 0 0 0.5rem !important;
+  color: var(--color-fg) !important;
+}
+
+.pouchie-product-info p {
+  margin: 0 0 0.6rem !important;
+  font-size: 1.4rem !important;
+  color: var(--color-fg-light) !important;
+}
+
+@media (max-width: 1100px) {
+  .pouchie-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 750px) {
+  .pouchie-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pouchie-product-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
