@@ -1412,3 +1412,11 @@ textarea { resize: vertical; min-height: 16rem; }
     grid-template-columns: 1fr !important;
   }
 }
+.product-card {
+  scroll-margin-top: 140px;
+}
+
+.product-card:target {
+  outline: 2px solid #121212;
+  outline-offset: 8px;
+}
