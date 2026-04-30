@@ -1737,3 +1737,36 @@ textarea { resize: vertical; min-height: 16rem; }
     grid-template-columns: 1fr !important;
   }
 }
+/* =============================================
+   POUCHIE PRODUCTS PAGE CARD ALIGNMENT
+   zarovnání tlačítek na stránce Produkty
+   ============================================= */
+
+.section-narrow .product-grid {
+  align-items: stretch !important;
+}
+
+.section-narrow .product-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+.section-narrow .product-card-info {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+}
+
+.section-narrow .product-card-info .btn {
+  margin-top: auto !important;
+  width: 100% !important;
+}
+
+.section-narrow .product-card-info p {
+  min-height: auto !important;
+}
+
+.section-narrow .product-card-info p:nth-of-type(2) {
+  min-height: 7.2rem !important;
+}
