@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pouchie</title>
+  <meta name="description" content="Pouchie nabízí praktické a diskrétní krabičky na sáčky pro každodenní nošení.">
+  <link rel="icon" href="assets/logos/Logo_monogram_black.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="announcement-bar">
+    Praktická krabička na sáčky pro každý den
+  </div>
+
+  <header class="site-header">
+    <div class="page-width header-inner">
+      <button class="mobile-menu-btn" type="button" aria-label="Otevřít menu" data-menu-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+
+      <a class="header-logo" href="index.html" aria-label="Pouchie">
+        <img src="assets/logos/Logo_black.png" alt="Pouchie logo">
+      </a>
+
+      <nav class="header-nav" aria-label="Hlavní navigace">
+        <ul>
+          <li><a class="active" href="index.html">Domů</a></li>
+          <li><a href="products.html">Produkty</a></li>
+          <li><a href="about.html">O Pouchie</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-icons">
+        <a class="header-icon-btn" href="login.html" aria-label="Přihlášení">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <a class="header-icon-btn" href="cart.html" aria-label="Košík">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 7h12l-1 14H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+          <span class="cart-count" data-cart-count>0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" data-mobile-menu>
+    <div class="mobile-menu-header">
+      <a class="header-logo" href="index.html">
+        <img src="assets/logos/Logo_black.png" alt="Pouchie logo">
+      </a>
+      <button class="mobile-menu-close" type="button" aria-label="Zavřít menu" data-menu-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="index.html">Domů</a>
+      <a href="products.html">Produkty</a>
+      <a href="about.html">O Pouchie</a>
+      <a href="contact.html">Kontakt</a>
+      <a href="login.html">Přihlášení</a>
+      <a href="cart.html">Košík</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Pouchie</div>
+        <h1 class="hero-title">Praktická krabička na sáčky, kterou máš vždy po ruce.</h1>
+        <p class="hero-text">Tenké, čisté a diskrétní pouzdro pro každodenní nošení. Navržené tak, aby nahradilo zbytečně velké balení a vešlo se tam, kam potřebuješ.</p>
+        <a class="btn btn-primary" href="products.html">Zobrazit produkty</a>
+        <a class="btn btn-secondary" href="about.html">Zjistit více</a>
+      </div>
+      <div class="hero-image img-placeholder">Produktová fotka Pouchie</div>
+    </section>
+
+    <section class="homepage-collection">
+      <div class="page-width">
+        <div class="collection-title-bar">
+          <h2>Vyber si svoji krabičku</h2>
+          <a href="products.html">Zobrazit vše</a>
+        </div>
+
+        <div class="product-grid">
+          <article class="product-card">
+            <a href="products.html" class="product-card-image img-placeholder">Krabička Pouchie</a>
+            <div class="product-card-info">
+              <h3 class="product-card-title">Krabička 1</h3>
+              <p class="product-card-price">Cena bude doplněna</p>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <a href="products.html" class="product-card-image img-placeholder">Krabička Pouchie</a>
+            <div class="product-card-info">
+              <h3 class="product-card-title">Krabička 2</h3>
+              <p class="product-card-price">Cena bude doplněna</p>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <a href="products.html" class="product-card-image img-placeholder">Krabička Pouchie</a>
+            <div class="product-card-info">
+              <h3 class="product-card-title">Krabička 3</h3>
+              <p class="product-card-price">Cena bude doplněna</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-banner">
+      <p><span>Pouchie</span> bez velké krabičky, bez zbytečností, jen praktické pouzdro.</p>
+    </section>
+
+    <section class="section">
+      <div class="page-width">
+        <div class="section-header">
+          <h2 class="section-title">Proč Pouchie</h2>
+          <p class="section-subtitle">Jednoduché řešení pro každodenní nošení sáčků. Čistě, diskrétně a pohodlně.</p>
+        </div>
+
+        <div class="values-grid">
+          <article class="value-card">
+            <div class="value-icon">01</div>
+            <h3>Diskrétní nošení</h3>
+            <p>Menší a čistší řešení místo objemného původního balení.</p>
+          </article>
+
+          <article class="value-card">
+            <div class="value-icon">02</div>
+            <h3>Praktický tvar</h3>
+            <p>Navržené pro kapsu, batoh, auto i běžný denní provoz.</p>
+          </article>
+
+          <article class="value-card">
+            <div class="value-icon">03</div>
+            <h3>Více barev</h3>
+            <p>Vyber si variantu, která sedí tvému stylu.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section feature-grid page-width">
+      <div class="feature-image img-placeholder">Lifestyle vizuál Pouchie</div>
+      <div class="feature-content">
+        <h2 class="section-title">Jednoduché pouzdro, které dává smysl.</h2>
+        <p>Pouchie vzniklo pro lidi, kteří chtějí jednoduché a čisté řešení pro každodenní nošení sáčků. Bez velké krabičky. Bez zbytečností. Jen praktické pouzdro, které dává smysl.</p>
+        <a class="btn btn-primary" href="products.html">Vybrat krabičku</a>
+      </div>
+    </section>
+
+    <section class="appreciation-section">
+      <h2>Vyber si svoji Pouchie krabičku.</h2>
+      <p>První produktové fotky a finální textace doplníme brzy. Teď máš funkční základ webu.</p>
+      <a class="btn btn-secondary" href="products.html">Produkty</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-width footer-top">
+      <div class="footer-brand">
+        <img src="assets/logos/Logo_black.png" alt="Pouchie logo" style="height:50px;width:auto;margin-bottom:1.5rem;">
+        <p>Praktické krabičky na sáčky pro každodenní nošení.</p>
+      </div>
+
+      <nav class="footer-nav">
+        <div class="footer-nav-title">Menu</div>
+        <ul>
+          <li><a href="products.html">Produkty</a></li>
+          <li><a href="about.html">O Pouchie</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-nav">
+        <div class="footer-nav-title">Newsletter</div>
+        <p>Nové barvy, produkty a novinky z Pouchie.</p>
+        <form class="newsletter-form" data-placeholder-form>
+          <input type="email" placeholder="E-mail">
+          <button class="newsletter-submit" type="submit">OK</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="page-width footer-bottom">
+      <div class="footer-copy">© 2026 Pouchie</div>
+      <div class="footer-policies">
+        <a href="#">Obchodní podmínky</a>
+        <a href="#">Ochrana osobních údajů</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" data-toast></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

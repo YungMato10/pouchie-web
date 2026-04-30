@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Košík – Pouchie</title>
+  <meta name="description" content="Pouchie nabízí praktické a diskrétní krabičky na sáčky pro každodenní nošení.">
+  <link rel="icon" href="assets/logos/Logo_monogram_black.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="announcement-bar">Praktická krabička na sáčky pro každý den</div>
+
+  <header class="site-header">
+    <div class="page-width header-inner">
+      <button class="mobile-menu-btn" type="button" data-menu-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a class="header-logo" href="index.html"><img src="assets/logos/Logo_black.png" alt="Pouchie logo"></a>
+      <nav class="header-nav">
+        <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="products.html">Produkty</a></li>
+          <li><a href="about.html">O Pouchie</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+      <div class="header-icons">
+        <a class="header-icon-btn" href="login.html">Přihlášení</a>
+        <a class="header-icon-btn" href="cart.html">Košík <span class="cart-count" data-cart-count>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" data-mobile-menu>
+    <div class="mobile-menu-header">
+      <a class="header-logo" href="index.html"><img src="assets/logos/Logo_black.png" alt="Pouchie logo"></a>
+      <button class="mobile-menu-close" type="button" data-menu-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="index.html">Domů</a>
+      <a href="products.html">Produkty</a>
+      <a href="about.html">O Pouchie</a>
+      <a href="contact.html">Kontakt</a>
+      <a href="login.html">Přihlášení</a>
+      <a href="cart.html">Košík</a>
+    </nav>
+  </div>
+
+  <main class="cart-page">
+    <div class="page-width">
+      <h1>Košík</h1>
+
+      <div class="cart-empty">
+        <h2>Váš košík je prázdný</h2>
+        <p>Vyberte si jednu z Pouchie krabiček a vraťte se zpět.</p>
+        <a class="btn btn-primary" href="products.html">Pokračovat v nákupu</a>
+      </div>
+
+      <div class="cart-layout" style="display:none;">
+        <div>
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Produkt</th>
+                <th>Množství</th>
+                <th>Celkem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="cart-item-info">
+                    <div class="cart-item-image img-placeholder">Pouchie</div>
+                    <div>
+                      <div class="cart-item-title">Krabička 1</div>
+                      <div class="cart-item-variant">Barva 1</div>
+                      <button class="cart-remove-btn" type="button">Odebrat</button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="qty-control">
+                    <button class="qty-btn" type="button">−</button>
+                    <input class="qty-input" value="1" type="number" min="1">
+                    <button class="qty-btn" type="button">+</button>
+                  </div>
+                </td>
+                <td>Cena bude doplněna</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="cart-summary">
+          <div class="cart-summary-title">Shrnutí objednávky</div>
+          <div class="cart-summary-line">
+            <span>Mezisoučet</span>
+            <span>Cena bude doplněna</span>
+          </div>
+          <div class="cart-summary-line total">
+            <span>Celkem</span>
+            <span>Cena bude doplněna</span>
+          </div>
+          <button class="btn btn-primary btn-full" type="button" data-placeholder-checkout>Přejít k objednávce</button>
+          <p class="cart-summary-note">Objednávka je zatím pouze ukázková.</p>
+          <a class="cart-continue" href="products.html">Pokračovat v nákupu</a>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-width footer-bottom">
+      <div class="footer-copy">© 2026 Pouchie</div>
+    </div>
+  </footer>
+
+  <div class="toast" data-toast></div>
+  <script src="js/main.js"></script>
+</body>
+</html>
