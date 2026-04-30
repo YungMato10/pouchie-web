@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kontakt – Pouchie</title>
+  <meta name="description" content="Pouchie nabízí praktické a diskrétní krabičky na sáčky pro každodenní nošení.">
+  <link rel="icon" href="assets/logos/Logo_monogram_black.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="announcement-bar">Praktická krabička na sáčky pro každý den</div>
+
+  <header class="site-header">
+    <div class="page-width header-inner">
+      <button class="mobile-menu-btn" type="button" data-menu-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a class="header-logo" href="index.html"><img src="assets/logos/Logo_black.png" alt="Pouchie logo"></a>
+      <nav class="header-nav">
+        <ul>
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="products.html">Produkty</a></li>
+          <li><a href="about.html">O Pouchie</a></li>
+          <li><a class="active" href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+      <div class="header-icons">
+        <a class="header-icon-btn" href="login.html">Přihlášení</a>
+        <a class="header-icon-btn" href="cart.html">Košík <span class="cart-count" data-cart-count>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" data-mobile-menu>
+    <div class="mobile-menu-header">
+      <a class="header-logo" href="index.html"><img src="assets/logos/Logo_black.png" alt="Pouchie logo"></a>
+      <button class="mobile-menu-close" type="button" data-menu-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-menu-nav">
+      <a href="index.html">Domů</a>
+      <a href="products.html">Produkty</a>
+      <a href="about.html">O Pouchie</a>
+      <a href="contact.html">Kontakt</a>
+      <a href="login.html">Přihlášení</a>
+      <a href="cart.html">Košík</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="page-width contact-layout">
+      <section class="contact-intro">
+        <h1>Kontakt</h1>
+        <p>Budeme rádi, když se nám ozvete. Ať už máte dotaz, zpětnou vazbu nebo nápad na novou barevnou variantu, napište nám přes formulář níže.</p>
+      </section>
+
+      <form data-placeholder-form>
+        <div class="form-grid">
+          <div>
+            <label for="name">Jméno</label>
+            <input id="name" name="name" type="text">
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Telefon, nepovinné</label>
+          <input id="phone" name="phone" type="tel">
+        </div>
+
+        <div class="form-group">
+          <label for="message">Zpráva</label>
+          <textarea id="message" name="message"></textarea>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Odeslat</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-width footer-bottom">
+      <div class="footer-copy">© 2026 Pouchie</div>
+    </div>
+  </footer>
+
+  <div class="toast" data-toast></div>
+  <script src="js/main.js"></script>
+</body>
+</html>
