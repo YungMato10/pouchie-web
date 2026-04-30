@@ -1813,3 +1813,23 @@ textarea { resize: vertical; min-height: 16rem; }
     padding: 3rem !important;
   }
 }
+/* =============================================
+   POUCHIE APPRECIATION SECTION BUTTON FIX
+   viditelné tlačítko v černé homepage sekci
+   ============================================= */
+
+.appreciation-section .btn,
+.appreciation-section .btn-secondary {
+  background: #ffffff !important;
+  color: #121212 !important;
+  border-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.appreciation-section .btn:hover,
+.appreciation-section .btn-secondary:hover {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  opacity: 1 !important;
+}
