@@ -1770,3 +1770,46 @@ textarea { resize: vertical; min-height: 16rem; }
 .section-narrow .product-card-info p:nth-of-type(2) {
   min-height: 7.2rem !important;
 }
+/* =============================================
+   POUCHIE ABOUT PAGE LAYOUT FIX
+   text a vizuál vedle sebe
+   ============================================= */
+
+.about-hero-inner {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6rem !important;
+  align-items: center !important;
+}
+
+.about-hero-content {
+  min-width: 0 !important;
+}
+
+.about-brand-visual {
+  background: #ffffff !important;
+  min-height: 52rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6rem !important;
+}
+
+.about-brand-visual img {
+  max-width: 80% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+@media (max-width: 750px) {
+  .about-hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+
+  .about-brand-visual {
+    min-height: 32rem !important;
+    padding: 3rem !important;
+  }
+}
