@@ -1581,3 +1581,59 @@ textarea { resize: vertical; min-height: 16rem; }
     padding: 2rem;
   }
 }
+/* =============================================
+   POUCHIE PRODUCTS PAGE SIZE FIX
+   menší produktové karty na stránce Produkty
+   ============================================= */
+
+.section-narrow .product-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 1.6rem !important;
+}
+
+.section-narrow .product-card-image {
+  aspect-ratio: 1 / 1.15 !important;
+}
+
+.section-narrow .product-card-image img {
+  padding: 1.4rem !important;
+  object-fit: contain !important;
+}
+
+.section-narrow .product-card-info {
+  padding-top: 1.1rem !important;
+}
+
+.section-narrow .product-card-title {
+  font-size: 1.35rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.section-narrow .product-card-info p {
+  font-size: 1.35rem !important;
+  line-height: 1.45 !important;
+  margin-bottom: 0.45rem !important;
+}
+
+.section-narrow .btn {
+  padding: 1.1rem 1.6rem !important;
+  font-size: 1.15rem !important;
+}
+
+@media (max-width: 1100px) {
+  .section-narrow .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 750px) {
+  .section-narrow .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-narrow .product-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
