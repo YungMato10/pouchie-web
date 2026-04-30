@@ -55,15 +55,17 @@ function showToast(message) {
 function addToCart(product) {
   const cart = getCart();
   const existingProduct = cart.find((item) => item.id === product.id);
+  const cleanPrice = parseInt(String(product.price).replace(/\D/g, ''), 10) || 0;
 
   if (existingProduct) {
     existingProduct.quantity += 1;
+    existingProduct.price = cleanPrice;
   } else {
     cart.push({
       id: product.id,
       name: product.name,
       color: product.color,
-      price: parseInt(String(product.price).replace(/\D/g, ''), 10) || 0,
+      price: cleanPrice,
       image: product.image,
       quantity: 1
     });
