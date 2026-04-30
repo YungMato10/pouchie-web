@@ -1833,3 +1833,35 @@ textarea { resize: vertical; min-height: 16rem; }
   border-color: #ffffff !important;
   opacity: 1 !important;
 }
+/* =============================================
+   POUCHIE WHITE BUTTON FIX
+   viditelné tlačítko v černé sekci homepage
+   ============================================= */
+
+.pouchie-white-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #ffffff !important;
+  color: #121212 !important;
+  border: 1px solid #ffffff !important;
+  padding: 1.4rem 3rem !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  min-width: 16rem !important;
+  margin-top: 1rem !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.pouchie-white-button:hover {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  opacity: 1 !important;
+}
