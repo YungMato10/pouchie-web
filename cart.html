@@ -51,67 +51,51 @@
   </div>
 
   <main class="cart-page">
-    <div class="page-width">
-      <h1>Košík</h1>
+  <div class="page-width">
+    <h1>Košík</h1>
 
-      <div class="cart-empty">
-        <h2>Váš košík je prázdný</h2>
-        <p>Vyberte si jednu z Pouchie krabiček a vraťte se zpět.</p>
-        <a class="btn btn-primary" href="products.html">Pokračovat v nákupu</a>
+    <div class="cart-empty" data-cart-empty>
+      <h2>Váš košík je prázdný</h2>
+      <p>Vyberte si jednu z Pouchie krabiček a vraťte se zpět.</p>
+      <a class="btn btn-primary" href="products.html">Pokračovat v nákupu</a>
+    </div>
+
+    <div class="cart-layout" data-cart-layout style="display:none;">
+      <div>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Produkt</th>
+              <th>Množství</th>
+              <th>Celkem</th>
+            </tr>
+          </thead>
+
+          <tbody data-cart-items>
+          </tbody>
+        </table>
       </div>
 
-      <div class="cart-layout" style="display:none;">
-        <div>
-          <table class="cart-table">
-            <thead>
-              <tr>
-                <th>Produkt</th>
-                <th>Množství</th>
-                <th>Celkem</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="cart-item-info">
-                    <div class="cart-item-image img-placeholder">Pouchie</div>
-                    <div>
-                      <div class="cart-item-title">Krabička 1</div>
-                      <div class="cart-item-variant">Barva 1</div>
-                      <button class="cart-remove-btn" type="button">Odebrat</button>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="qty-control">
-                    <button class="qty-btn" type="button">−</button>
-                    <input class="qty-input" value="1" type="number" min="1">
-                    <button class="qty-btn" type="button">+</button>
-                  </div>
-                </td>
-                <td>Cena bude doplněna</td>
-              </tr>
-            </tbody>
-          </table>
+      <aside class="cart-summary">
+        <div class="cart-summary-title">Shrnutí objednávky</div>
+
+        <div class="cart-summary-line">
+          <span>Počet produktů</span>
+          <span data-cart-total-items>0</span>
         </div>
 
-        <aside class="cart-summary">
-          <div class="cart-summary-title">Shrnutí objednávky</div>
-          <div class="cart-summary-line">
-            <span>Mezisoučet</span>
-            <span>Cena bude doplněna</span>
-          </div>
-          <div class="cart-summary-line total">
-            <span>Celkem</span>
-            <span>Cena bude doplněna</span>
-          </div>
-          <button class="btn btn-primary btn-full" type="button" data-placeholder-checkout>Přejít k objednávce</button>
-          <p class="cart-summary-note">Objednávka je zatím pouze ukázková.</p>
-          <a class="cart-continue" href="products.html">Pokračovat v nákupu</a>
-        </aside>
-      </div>
+        <div class="cart-summary-line total">
+          <span>Celkem</span>
+          <span>Cena bude doplněna</span>
+        </div>
+
+        <button class="btn btn-primary btn-full" type="button" data-placeholder-checkout>Přejít k objednávce</button>
+        <p class="cart-summary-note">Objednávka je zatím pouze ukázková.</p>
+        <a class="cart-continue" href="products.html">Pokračovat v nákupu</a>
+      </aside>
     </div>
-  </main>
+  </div>
+</main>
 
   <footer class="site-footer">
     <div class="page-width footer-bottom">
