@@ -63,7 +63,7 @@ function addToCart(product) {
       id: product.id,
       name: product.name,
       color: product.color,
-      price: Number(product.price) || 0,
+      price: parseInt(String(product.price).replace(/\D/g, ''), 10) || 0,
       image: product.image,
       quantity: 1
     });
