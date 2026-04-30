@@ -18,8 +18,19 @@ function saveCart(cart) {
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
 }
 
+function formatPrice(price) {
+  return `${price.toLocaleString('cs-CZ')} Kč`;
+}
+
 function getCartCount() {
   return getCart().reduce((total, item) => total + item.quantity, 0);
+}
+
+function getCartTotalPrice() {
+  return getCart().reduce((total, item) => {
+    const price = Number(item.price) || 0;
+    return total + price * item.quantity;
+  }, 0);
 }
 
 function updateCartCount() {
@@ -52,7 +63,7 @@ function addToCart(product) {
       id: product.id,
       name: product.name,
       color: product.color,
-      price: product.price,
+      price: Number(product.price) || 0,
       image: product.image,
       quantity: 1
     });
@@ -94,6 +105,7 @@ function renderCartPage() {
   const cartEmpty = document.querySelector('[data-cart-empty]');
   const cartLayout = document.querySelector('[data-cart-layout]');
   const cartTotalItems = document.querySelector('[data-cart-total-items]');
+  const cartTotalPrice = document.querySelector('[data-cart-total-price]');
 
   if (!cartItemsContainer || !cartEmpty || !cartLayout) return;
 
@@ -108,6 +120,10 @@ function renderCartPage() {
       cartTotalItems.textContent = '0';
     }
 
+    if (cartTotalPrice) {
+      cartTotalPrice.textContent = '0 Kč';
+    }
+
     return;
   }
 
@@ -115,6 +131,8 @@ function renderCartPage() {
   cartLayout.style.display = 'grid';
 
   cartItemsContainer.innerHTML = cart.map((item) => {
+    const itemTotal = item.price * item.quantity;
+
     return `
       <tr>
         <td>
@@ -137,15 +155,20 @@ function renderCartPage() {
           </div>
         </td>
 
-        <td>${item.price}</td>
+        <td>${formatPrice(itemTotal)}</td>
       </tr>
     `;
   }).join('');
 
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = getCartCount();
+  const totalPrice = getCartTotalPrice();
 
   if (cartTotalItems) {
     cartTotalItems.textContent = String(totalItems);
+  }
+
+  if (cartTotalPrice) {
+    cartTotalPrice.textContent = formatPrice(totalPrice);
   }
 
   document.querySelectorAll('[data-remove-from-cart]').forEach((button) => {
