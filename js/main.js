@@ -279,7 +279,7 @@ function submitOrder() {
 
   console.log('Objednávka:', order);
 
-  // TODO: fetch('/api/create-order', { method: 'POST', body: JSON.stringify(order) })
+  fetch("https://hook.eu1.make.com/12sofoourwd4ydwchslxnq71w9rlc2g3", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(order) }).then(() => console.log("Objednávka odeslána do Make")).catch(err => console.error("Chyba:", err));
 
   const checkoutSection = document.querySelector('[data-checkout-section]');
   const orderConfirm = document.querySelector('[data-order-confirm]');
