@@ -7,6 +7,247 @@
   <meta name="description" content="Pouchie nabízí praktické a diskrétní krabičky na sáčky pro každodenní nošení.">
   <link rel="icon" href="assets/logos/Logo_monogram_black.png">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ── Checkout formulář ── */
+    .checkout-section {
+      margin-top: 2.5rem;
+      border-top: 1px solid #e5e5e5;
+      padding-top: 2rem;
+      display: none;
+    }
+    .checkout-section.visible {
+      display: block;
+    }
+    .checkout-section h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .checkout-grid .full-width {
+      grid-column: 1 / -1;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+    .form-group label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #555;
+      letter-spacing: 0.02em;
+    }
+    .form-group input,
+    .form-group select {
+      padding: 0.625rem 0.75rem;
+      border: 1px solid #d1d1d1;
+      border-radius: 6px;
+      font-size: 0.9375rem;
+      font-family: inherit;
+      background: #fff;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #111;
+    }
+    .form-group input.error,
+    .form-group select.error {
+      border-color: #e53e3e;
+    }
+    .form-error-msg {
+      font-size: 0.75rem;
+      color: #e53e3e;
+      display: none;
+    }
+    .form-group.has-error .form-error-msg {
+      display: block;
+    }
+
+    /* Doprava & platba */
+    .shipping-options,
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      margin-top: 0.25rem;
+    }
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border: 1px solid #d1d1d1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .option-card:hover {
+      border-color: #aaa;
+    }
+    .option-card input[type="radio"] {
+      accent-color: #111;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    .option-card.selected {
+      border-color: #111;
+      background: #fafafa;
+    }
+    .option-label {
+      flex: 1;
+      font-size: 0.9375rem;
+    }
+    .option-price {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: #111;
+    }
+    .option-note {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.125rem;
+    }
+
+    /* Osobní odběr — výběr města */
+    .pickup-cities {
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding-left: 0.25rem;
+    }
+    .pickup-cities.visible {
+      display: flex;
+    }
+    .pickup-city-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .pickup-city-option input[type="radio"] {
+      accent-color: #111;
+    }
+
+    /* Shrnutí — doprava řádek */
+    .cart-summary-line.shipping-line {
+      display: none;
+    }
+    .cart-summary-line.shipping-line.visible {
+      display: flex;
+    }
+
+    /* Tlačítko objednat */
+    .btn-order {
+      display: none;
+      margin-top: 1rem;
+    }
+    .btn-order.visible {
+      display: block;
+    }
+
+    /* Kroky */
+    .checkout-steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .checkout-step {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #aaa;
+      background: #fafafa;
+      text-align: center;
+      border-right: 1px solid #e5e5e5;
+      transition: color 0.2s, background 0.2s;
+    }
+    .checkout-step:last-child {
+      border-right: none;
+    }
+    .checkout-step.active {
+      color: #111;
+      background: #fff;
+    }
+    .checkout-step.done {
+      color: #111;
+      background: #f0f0f0;
+    }
+
+    .checkout-note {
+      font-size: 0.8125rem;
+      color: #888;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    /* Potvrzení objednávky */
+    .order-confirm {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .order-confirm.visible {
+      display: block;
+    }
+    .order-confirm-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .order-confirm h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .order-confirm p {
+      color: #555;
+      font-size: 0.9375rem;
+      margin-bottom: 0.375rem;
+    }
+    .order-confirm .order-number {
+      font-size: 0.875rem;
+      color: #888;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkout-grid .full-width {
+        grid-column: 1;
+      }
+      .checkout-steps {
+        flex-direction: column;
+      }
+      .checkout-step {
+        border-right: none;
+        border-bottom: 1px solid #e5e5e5;
+        text-align: left;
+      }
+      .checkout-step:last-child {
+        border-bottom: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -27,7 +268,6 @@
         </ul>
       </nav>
       <div class="header-icons">
-        <a class="header-icon-btn" href="login.html">Přihlášení</a>
         <a class="header-icon-btn" href="cart.html">Košík <span class="cart-count" data-cart-count>0</span></a>
       </div>
     </div>
@@ -45,57 +285,233 @@
       <a href="products.html">Produkty</a>
       <a href="about.html">O Pouchie</a>
       <a href="contact.html">Kontakt</a>
-      <a href="login.html">Přihlášení</a>
       <a href="cart.html">Košík</a>
     </nav>
   </div>
 
   <main class="cart-page">
-  <div class="page-width">
-    <h1>Košík</h1>
+    <div class="page-width">
+      <h1>Košík</h1>
 
-    <div class="cart-empty" data-cart-empty>
-      <h2>Váš košík je prázdný</h2>
-      <p>Vyberte si jednu z Pouchie krabiček a vraťte se zpět.</p>
-      <a class="btn btn-primary" href="products.html">Pokračovat v nákupu</a>
-    </div>
-
-    <div class="cart-layout" data-cart-layout style="display:none;">
-      <div>
-        <table class="cart-table">
-          <thead>
-            <tr>
-              <th>Produkt</th>
-              <th>Množství</th>
-              <th>Celkem</th>
-            </tr>
-          </thead>
-
-          <tbody data-cart-items>
-          </tbody>
-        </table>
+      <!-- Prázdný košík -->
+      <div class="cart-empty" data-cart-empty>
+        <h2>Váš košík je prázdný</h2>
+        <p>Vyberte si jednu z Pouchie krabiček a vraťte se zpět.</p>
+        <a class="btn btn-primary" href="products.html">Pokračovat v nákupu</a>
       </div>
 
-      <aside class="cart-summary">
-        <div class="cart-summary-title">Shrnutí objednávky</div>
-
-        <div class="cart-summary-line">
-          <span>Počet produktů</span>
-          <span data-cart-total-items>0</span>
+      <!-- Košík s položkami -->
+      <div class="cart-layout" data-cart-layout style="display:none;">
+        <div>
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Produkt</th>
+                <th>Množství</th>
+                <th>Celkem</th>
+              </tr>
+            </thead>
+            <tbody data-cart-items></tbody>
+          </table>
         </div>
 
-        <div class="cart-summary-line total">
-  <span>Celkem</span>
-  <span data-cart-total-price>0 Kč</span>
-</div>
+        <aside class="cart-summary">
+          <div class="cart-summary-title">Shrnutí objednávky</div>
 
-        <button class="btn btn-primary btn-full" type="button" data-placeholder-checkout>Přejít k objednávce</button>
-        <p class="cart-summary-note">Objednávka je zatím pouze ukázková.</p>
-        <a class="cart-continue" href="products.html">Pokračovat v nákupu</a>
-      </aside>
+          <div class="cart-summary-line">
+            <span>Počet produktů</span>
+            <span data-cart-total-items>0</span>
+          </div>
+
+          <div class="cart-summary-line">
+            <span>Produkty celkem</span>
+            <span data-cart-total-price>0 Kč</span>
+          </div>
+
+          <div class="cart-summary-line shipping-line" data-shipping-summary-line>
+            <span data-shipping-label>Doprava</span>
+            <span data-shipping-price>—</span>
+          </div>
+
+          <div class="cart-summary-line total">
+            <span>K zaplacení</span>
+            <span data-cart-grand-total>0 Kč</span>
+          </div>
+
+          <button class="btn btn-primary btn-full" type="button" data-go-to-checkout>Přejít k objednávce</button>
+          <a class="cart-continue" href="products.html">Pokračovat v nákupu</a>
+        </aside>
+      </div>
+
+      <!-- Checkout formulář -->
+      <div class="checkout-section" data-checkout-section>
+
+        <div class="checkout-steps">
+          <div class="checkout-step active" data-step="1">1. Údaje</div>
+          <div class="checkout-step" data-step="2">2. Doprava</div>
+          <div class="checkout-step" data-step="3">3. Platba</div>
+        </div>
+
+        <!-- Krok 1: Kontaktní a doručovací údaje -->
+        <div data-checkout-step="1">
+          <h2>Kontaktní údaje</h2>
+          <div class="checkout-grid">
+            <div class="form-group">
+              <label for="firstName">Jméno *</label>
+              <input type="text" id="firstName" name="firstName" placeholder="Jan" autocomplete="given-name">
+              <span class="form-error-msg">Vyplňte jméno</span>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Příjmení *</label>
+              <input type="text" id="lastName" name="lastName" placeholder="Novák" autocomplete="family-name">
+              <span class="form-error-msg">Vyplňte příjmení</span>
+            </div>
+            <div class="form-group full-width">
+              <label for="email">E-mail *</label>
+              <input type="email" id="email" name="email" placeholder="jan@example.com" autocomplete="email">
+              <span class="form-error-msg">Vyplňte platný e-mail</span>
+            </div>
+            <div class="form-group full-width">
+              <label for="phone">Telefon *</label>
+              <input type="tel" id="phone" name="phone" placeholder="+420 600 000 000" autocomplete="tel">
+              <span class="form-error-msg">Vyplňte telefonní číslo</span>
+            </div>
+          </div>
+
+          <h2 style="margin-top:2rem;">Doručovací adresa</h2>
+          <div class="checkout-grid" data-delivery-address>
+            <div class="form-group full-width">
+              <label for="street">Ulice a číslo popisné *</label>
+              <input type="text" id="street" name="street" placeholder="Náměstí Svobody 1" autocomplete="street-address">
+              <span class="form-error-msg">Vyplňte ulici a číslo</span>
+            </div>
+            <div class="form-group">
+              <label for="city">Město *</label>
+              <input type="text" id="city" name="city" placeholder="Brno" autocomplete="address-level2">
+              <span class="form-error-msg">Vyplňte město</span>
+            </div>
+            <div class="form-group">
+              <label for="zip">PSČ *</label>
+              <input type="text" id="zip" name="zip" placeholder="602 00" autocomplete="postal-code" maxlength="6">
+              <span class="form-error-msg">Vyplňte PSČ</span>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem; display:flex; gap:1rem; justify-content:space-between; align-items:center;">
+            <button class="btn btn-secondary" type="button" data-back-to-cart>← Zpět do košíku</button>
+            <button class="btn btn-primary" type="button" data-next-step="2">Pokračovat →</button>
+          </div>
+        </div>
+
+        <!-- Krok 2: Doprava -->
+        <div data-checkout-step="2" style="display:none;">
+          <h2>Způsob dopravy</h2>
+          <div class="shipping-options">
+
+            <label class="option-card" data-option-card>
+              <input type="radio" name="shipping" value="zasilkovna" data-shipping-option>
+              <div class="option-label">
+                <div>Zásilkovna</div>
+                <div class="option-note">Doručení na výdejní místo dle výběru</div>
+              </div>
+              <span class="option-price">79 Kč</span>
+            </label>
+
+            <label class="option-card" data-option-card>
+              <input type="radio" name="shipping" value="osobni-brno" data-shipping-option>
+              <div class="option-label">
+                <div>Osobní odběr – Brno</div>
+                <div class="option-note">Místo a čas domluvíme po objednávce</div>
+              </div>
+              <span class="option-price">Zdarma</span>
+            </label>
+
+            <label class="option-card" data-option-card>
+              <input type="radio" name="shipping" value="osobni-prerov" data-shipping-option>
+              <div class="option-label">
+                <div>Osobní odběr – Přerov a okolí (10 km)</div>
+                <div class="option-note">Místo a čas domluvíme po objednávce</div>
+              </div>
+              <span class="option-price">Zdarma</span>
+            </label>
+
+          </div>
+
+          <div style="margin-top:1.5rem; display:flex; gap:1rem; justify-content:space-between; align-items:center;">
+            <button class="btn btn-secondary" type="button" data-prev-step="1">← Zpět</button>
+            <button class="btn btn-primary" type="button" data-next-step="3">Pokračovat →</button>
+          </div>
+        </div>
+
+        <!-- Krok 3: Platba -->
+        <div data-checkout-step="3" style="display:none;">
+          <h2>Způsob platby</h2>
+          <div class="payment-options">
+
+            <label class="option-card" data-option-card>
+              <input type="radio" name="payment" value="card" data-payment-option>
+              <div class="option-label">
+                <div>Kartou online</div>
+                <div class="option-note">Platba kartou přes zabezpečenou platební bránu Comgate</div>
+              </div>
+            </label>
+
+            <label class="option-card" data-option-card>
+              <input type="radio" name="payment" value="bank" data-payment-option>
+              <div class="option-label">
+                <div>Bankovní převod</div>
+                <div class="option-note">Platební údaje dostanete e-mailem po objednávce</div>
+              </div>
+            </label>
+
+            <label class="option-card" data-option-card id="dobrika-option">
+              <input type="radio" name="payment" value="cod" data-payment-option>
+              <div class="option-label">
+                <div>Dobírka</div>
+                <div class="option-note">Platba při převzetí zásilky — pouze pro Zásilkovnu</div>
+              </div>
+            </label>
+
+          </div>
+
+          <!-- Rekapitulace před odesláním -->
+          <div class="cart-summary" style="margin-top:2rem; max-width:100%;">
+            <div class="cart-summary-title">Rekapitulace objednávky</div>
+            <div class="cart-summary-line">
+              <span>Produkty</span>
+              <span data-recap-products>—</span>
+            </div>
+            <div class="cart-summary-line">
+              <span>Doprava</span>
+              <span data-recap-shipping>—</span>
+            </div>
+            <div class="cart-summary-line total">
+              <span>K zaplacení</span>
+              <span data-recap-total>—</span>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem; display:flex; gap:1rem; justify-content:space-between; align-items:center;">
+            <button class="btn btn-secondary" type="button" data-prev-step="2">← Zpět</button>
+            <button class="btn btn-primary" type="button" data-submit-order>Odeslat objednávku</button>
+          </div>
+          <p class="checkout-note">Kliknutím na „Odeslat objednávku" souhlasíte s <a href="#">obchodními podmínkami</a>.</p>
+        </div>
+
+      </div>
+
+      <!-- Potvrzení objednávky -->
+      <div class="order-confirm" data-order-confirm>
+        <div class="order-confirm-icon">✓</div>
+        <h2>Objednávka přijata!</h2>
+        <p>Děkujeme za vaši objednávku. Potvrzení jsme odeslali na váš e-mail.</p>
+        <p data-confirm-payment-info></p>
+        <p class="order-number" data-confirm-order-number></p>
+        <a class="btn btn-primary" href="products.html">Zpět na produkty</a>
+      </div>
+
     </div>
-  </div>
-</main>
+  </main>
 
   <footer class="site-footer">
     <div class="page-width footer-bottom">
