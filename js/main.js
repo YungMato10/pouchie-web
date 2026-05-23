@@ -228,17 +228,34 @@ function validateStep3() {
 }
 
 function updateCodVisibility() {
-  const shippingVal = document.querySelector('[data-shipping-option]:checked')?.value;
-  const codOption = document.getElementById('dobrika-option');
-  if (!codOption) return;
-  if (shippingVal !== 'zasilkovna') {
-    codOption.style.opacity = '0.4';
-    codOption.style.pointerEvents = 'none';
-    const codRadio = codOption.querySelector('input[type="radio"]');
-    if (codRadio?.checked) codRadio.checked = false;
-  } else {
-    codOption.style.opacity = '1';
-    codOption.style.pointerEvents = 'auto';
+  const cashOption = document.getElementById("hotove-option");
+  const shippingVal = document.querySelector("[data-shipping-option]:checked")?.value;
+  const isPickup = shippingVal === "osobni-brno" || shippingVal === "osobni-prerov";
+  const isZasilkovna = shippingVal === "zasilkovna";
+
+  // Dobírka — jen pro Zásilkovnu
+  const codOption = document.getElementById("dobrika-option");
+  if (codOption) {
+    if (!isZasilkovna) {
+      codOption.style.opacity = "0.4";
+      codOption.style.pointerEvents = "none";
+      const codRadio = codOption.querySelector("input[type=radio]");
+      if (codRadio?.checked) codRadio.checked = false;
+    } else {
+      codOption.style.opacity = "1";
+      codOption.style.pointerEvents = "auto";
+    }
+  }
+
+  // Hotově — jen pro osobní odběr
+  if (cashOption) {
+    cashOption.style.display = isPickup ? "flex" : "none";
+    if (!isPickup) {
+      const cashRadio = cashOption.querySelector("input[type=radio]");
+      if (cashRadio?.checked) cashRadio.checked = false;
+    }
+  }
+
   }
 }
 
@@ -292,6 +309,7 @@ function submitOrder() {
   if (confirmPaymentInfo) {
     if (paymentVal === 'bank') confirmPaymentInfo.textContent = 'Platební údaje pro bankovní převod vám zašleme e-mailem.';
     else if (paymentVal === 'cod') confirmPaymentInfo.textContent = 'Platbu uhradíte při převzetí zásilky na Zásilkovně.';
+    else if (paymentVal === 'cash') confirmPaymentInfo.textContent = 'Platbu uhradíte hotově při osobním předání.';
     else if (paymentVal === 'card') confirmPaymentInfo.textContent = 'Za chvíli vás přesměrujeme na platební bránu.';
   }
 
