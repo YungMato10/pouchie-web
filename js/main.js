@@ -255,8 +255,6 @@ function updateCodVisibility() {
       if (cashRadio?.checked) cashRadio.checked = false;
     }
   }
-
-  }
 }
 
 function generateOrderNumber() {
