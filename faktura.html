@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Faktura – Pouchie</title>
+  <link rel="icon" href="assets/logos/Logo_monogram_black.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Georgia, serif; background: #f5f5f5; padding: 2rem 1rem; color: #111; }
+
+    .invoice { max-width: 680px; margin: 0 auto; background: #fff; border: 1px solid #e0e0e0; }
+
+    /* Tisk */
+    .print-bar { max-width: 680px; margin: 0 auto 1rem; display: flex; justify-content: flex-end; gap: 0.75rem; }
+    .print-btn {
+      padding: 0.625rem 1.25rem;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-size: 0.8125rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .print-btn:hover { opacity: 0.85; }
+    .print-btn.secondary { background: #fff; color: #111; border: 1px solid #ddd; }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .print-bar { display: none; }
+      .invoice { border: none; max-width: 100%; }
+    }
+
+    /* Hlavička */
+    .inv-header {
+      padding: 2.5rem;
+      border-bottom: 2px solid #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .inv-brand { font-size: 1.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
+    .inv-brand-sub { font-size: 0.75rem; color: #888; font-style: italic; margin-top: 0.25rem; }
+    .inv-meta { text-align: right; }
+    .inv-meta-title { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .inv-meta-num { font-size: 0.875rem; color: #555; margin-top: 0.375rem; }
+    .inv-meta-date { font-size: 0.8125rem; color: #888; margin-top: 0.125rem; }
+
+    /* Adresy */
+    .inv-parties {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .inv-party { flex: 1; }
+    .inv-party-label { font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 0.75rem; }
+    .inv-party-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.375rem; }
+    .inv-party-line { font-size: 0.875rem; color: #555; line-height: 1.7; }
+
+    /* Položky */
+    .inv-items { padding: 2rem 2.5rem; border-bottom: 1px solid #eee; }
+    .inv-items-label { font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 400;
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    thead th.r { text-align: right; }
+    tbody td { padding: 0.875rem 0.5rem; border-bottom: 1px solid #f5f5f5; font-size: 0.9375rem; }
+    tbody td.r { text-align: right; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* Součty */
+    .inv-totals { padding: 0 2.5rem 2rem; border-bottom: 1px solid #eee; }
+    .inv-totals-inner { margin-left: auto; max-width: 280px; }
+    .total-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9375rem; color: #555; }
+    .total-row.sep { border-top: 1px solid #eee; margin-top: 0.375rem; padding-top: 0.625rem; }
+    .total-row.grand { border-top: 2px solid #111; margin-top: 0.5rem; padding-top: 0.75rem; font-size: 1.125rem; font-weight: 700; color: #111; }
+
+    /* Platba */
+    .inv-payment { padding: 2rem 2.5rem; background: #fafafa; border-bottom: 1px solid #eee; display: flex; gap: 2rem; align-items: flex-start; }
+    .inv-payment-info { flex: 1; }
+    .inv-payment-label { font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; margin-bottom: 1rem; }
+    .pay-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.875rem; }
+    .pay-key { color: #888; min-width: 140px; flex-shrink: 0; }
+    .pay-val { font-weight: 600; }
+    .due-notice { margin-top: 1rem; padding: 0.75rem 1rem; background: #fff3cd; border-left: 3px solid #f59e0b; font-size: 0.8125rem; color: #92400e; }
+    .inv-qr { flex-shrink: 0; text-align: center; }
+    .inv-qr img { width: 130px; height: 130px; display: block; border: 1px solid #eee; }
+    .inv-qr-label { font-size: 0.6875rem; color: #aaa; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Patička */
+    .inv-footer { padding: 1.25rem 2.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .inv-footer-note { font-size: 0.75rem; color: #aaa; font-style: italic; }
+    .inv-footer-brand { font-size: 0.75rem; color: #aaa; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Error */
+    .inv-error { padding: 4rem 2rem; text-align: center; color: #888; }
+    .inv-error h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+
+    @media (max-width: 600px) {
+      .inv-header, .inv-parties, .inv-items, .inv-totals, .inv-payment, .inv-footer { padding: 1.25rem; }
+      .inv-header { flex-direction: column; }
+      .inv-meta { text-align: left; }
+      .inv-parties { flex-direction: column; gap: 1.5rem; }
+      .inv-payment { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="print-btn secondary" onclick="history.back()">← Zpět</button>
+  <button class="print-btn" onclick="window.print()">🖨 Tisknout / Uložit PDF</button>
+</div>
+
+<div class="invoice" id="invoice">
+  <div class="inv-error" id="errorMsg" style="display:none;">
+    <h2>Faktura nenalezena</h2>
+    <p>Odkaz je neplatný nebo vypršel.</p>
+  </div>
+</div>
+
+<script>
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    orderNumber:  p.get('order') || '',
+    firstName:    p.get('fn') || '',
+    lastName:     p.get('ln') || '',
+    email:        p.get('email') || '',
+    phone:        p.get('phone') || '',
+    street:       p.get('street') || '',
+    city:         p.get('city') || '',
+    zip:          p.get('zip') || '',
+    shipping:     p.get('shipping') || '',
+    shippingPrice: parseInt(p.get('sp') || '0'),
+    productsTotal: parseInt(p.get('pt') || '0'),
+    grandTotal:   parseInt(p.get('total') || '0'),
+    items:        p.get('items') || '',
+    date:         p.get('date') || new Date().toISOString()
+  };
+}
+
+function formatPrice(n) {
+  return Number(n).toLocaleString('cs-CZ') + ' Kč';
+}
+
+function formatDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' });
+  } catch { return iso; }
+}
+
+function getDueDate(iso) {
+  try {
+    const d = new Date(iso);
+    d.setDate(d.getDate() + 7);
+    return d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' });
+  } catch { return '—'; }
+}
+
+function parseItems(itemsStr) {
+  if (!itemsStr) return [];
+  try {
+    return JSON.parse(decodeURIComponent(itemsStr));
+  } catch { return []; }
+}
+
+function generateVS(orderNumber) {
+  return orderNumber.replace(/PCH-/g, '').replace(/-/g, '').replace(/[^0-9]/g, '').slice(0, 10);
+}
+
+function generateQR(grandTotal, orderNumber) {
+  const iban = 'CZ6603000000000290792252';
+  const amount = grandTotal + '.00';
+  const msg = 'Pouchie ' + orderNumber;
+  const data = `SPD*1.0*ACC:${iban}*AM:${amount}*CC:CZK*MSG:${encodeURIComponent(msg)}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(data)}`;
+}
+
+function render() {
+  const d = getParams();
+
+  if (!d.orderNumber) {
+    document.getElementById('errorMsg').style.display = 'block';
+    return;
+  }
+
+  const items = parseItems(d.items);
+  const vs = generateVS(d.orderNumber);
+  const qrUrl = generateQR(d.grandTotal, d.orderNumber);
+
+  const itemsRows = items.length > 0
+    ? items.map(item => `
+        <tr>
+          <td>Pouchie krabička – ${item.color || item.name || '—'}</td>
+          <td class="r">${item.quantity}</td>
+          <td class="r">${formatPrice(item.price)}</td>
+          <td class="r" style="font-weight:600;">${formatPrice(item.price * item.quantity)}</td>
+        </tr>
+      `).join('')
+    : `<tr><td colspan="4" style="padding:1rem 0.5rem;color:#888;font-style:italic;">Položky nejsou k dispozici</td></tr>`;
+
+  document.getElementById('invoice').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-brand">Pouchie</div>
+        <div class="inv-brand-sub">Krabička na sáčky pro každý den</div>
+      </div>
+      <div class="inv-meta">
+        <div class="inv-meta-title">Faktura</div>
+        <div class="inv-meta-num">č. ${d.orderNumber}</div>
+        <div class="inv-meta-date">Vystaveno: ${formatDate(d.date)}</div>
+        <div class="inv-meta-date">Splatnost: ${getDueDate(d.date)}</div>
+      </div>
+    </div>
+
+    <div class="inv-parties">
+      <div class="inv-party">
+        <div class="inv-party-label">Prodejce</div>
+        <div class="inv-party-name">Pouchie</div>
+        <div class="inv-party-line">Jana Uhra 10</div>
+        <div class="inv-party-line">602 00 Brno</div>
+        <div class="inv-party-line">info@pouchie.cz</div>
+        <div class="inv-party-line" style="margin-top:0.5rem;font-size:0.8125rem;color:#aaa;">Fyzická osoba — nejsem plátce DPH</div>
+      </div>
+      <div class="inv-party">
+        <div class="inv-party-label">Zákazník</div>
+        <div class="inv-party-name">${d.firstName} ${d.lastName}</div>
+        <div class="inv-party-line">${d.street}</div>
+        <div class="inv-party-line">${d.zip} ${d.city}</div>
+        <div class="inv-party-line">${d.email}</div>
+        <div class="inv-party-line">${d.phone}</div>
+      </div>
+    </div>
+
+    <div class="inv-items">
+      <div class="inv-items-label">Položky objednávky</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Produkt</th>
+            <th class="r">Ks</th>
+            <th class="r">Cena/ks</th>
+            <th class="r">Celkem</th>
+          </tr>
+        </thead>
+        <tbody>${itemsRows}</tbody>
+      </table>
+    </div>
+
+    <div class="inv-totals">
+      <div class="inv-totals-inner">
+        <div class="total-row">
+          <span>Produkty</span>
+          <span>${formatPrice(d.productsTotal)}</span>
+        </div>
+        <div class="total-row sep">
+          <span>Doprava (${d.shipping})</span>
+          <span>${d.shippingPrice === 0 ? 'Zdarma' : formatPrice(d.shippingPrice)}</span>
+        </div>
+        <div class="total-row grand">
+          <span>K úhradě</span>
+          <span>${formatPrice(d.grandTotal)}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inv-payment">
+      <div class="inv-payment-info">
+        <div class="inv-payment-label">Platební údaje</div>
+        <div class="pay-row"><span class="pay-key">Číslo účtu</span><span class="pay-val">290792252/0300</span></div>
+        <div class="pay-row"><span class="pay-key">Variabilní symbol</span><span class="pay-val">${vs}</span></div>
+        <div class="pay-row"><span class="pay-key">Částka</span><span class="pay-val">${formatPrice(d.grandTotal)}</span></div>
+        <div class="pay-row"><span class="pay-key">Způsob platby</span><span class="pay-val">Bankovní převod</span></div>
+        <div class="due-notice">⏱ Prosíme o uhrazení do <strong>${getDueDate(d.date)}</strong></div>
+      </div>
+      <div class="inv-qr">
+        <img src="${qrUrl}" alt="QR platba">
+        <div class="inv-qr-label">Naskenuj a zaplať</div>
+      </div>
+    </div>
+
+    <div class="inv-footer">
+      <div class="inv-footer-note">Děkujeme za nákup!</div>
+      <div class="inv-footer-brand">Pouchie © 2026</div>
+    </div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
