@@ -2,9 +2,823 @@
 <html lang="cs">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin – Pouchie</title>
+  <link rel="icon" href="assets/logos/Logo_monogram_black.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #111;
+      --white: #fff;
+      --gray-50: #fafafa;
+      --gray-100: #f4f4f4;
+      --gray-200: #e8e8e8;
+      --gray-400: #aaa;
+      --gray-600: #666;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --blue: #2563eb;
+      --blue-light: #dbeafe;
+      --orange: #ea580c;
+      --orange-light: #ffedd5;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--gray-50);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black);
+    }
+    .login-box {
+      background: var(--white);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      border-radius: 2px;
+    }
+    .login-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .login-subtitle {
+      font-size: 0.8125rem;
+      color: var(--gray-600);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .login-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      color: var(--gray-600);
+    }
+    .login-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 2px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 1.25rem;
+    }
+    .login-input:focus { border-color: var(--black); }
+    .login-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .login-btn:hover { opacity: 0.85; }
+    .login-error {
+      font-size: 0.8125rem;
+      color: var(--red);
+      margin-top: 0.75rem;
+      display: none;
+    }
+    .login-error.visible { display: block; }
+
+    /* ── Admin layout ── */
+    .admin-screen { display: none; }
+    .admin-screen.visible { display: block; }
+
+    .admin-header {
+      background: var(--black);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-header-logo {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .admin-header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .admin-header-tag {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    .logout-btn {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: 0.375rem 0.875rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+    .admin-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 0.8125rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+      font-style: italic;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .toolbar-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .filter-select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: 2px;
+      font-size: 0.8125rem;
+      font-family: inherit;
+      background: var(--white);
+      cursor: pointer;
+      outline: none;
+    }
+    .refresh-btn {
+      padding: 0.5rem 1rem;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 2px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      transition: background 0.15s;
+    }
+    .refresh-btn:hover { background: var(--gray-100); }
+
+    /* ── Tabulka ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .orders-table th {
+      padding: 0.875rem 1rem;
+      text-align: left;
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    .orders-table td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tbody tr:hover { background: var(--gray-50); }
+
+    .order-number {
+      font-family: monospace;
+      font-size: 0.8125rem;
+      color: var(--gray-600);
+    }
+    .customer-name { font-weight: 600; }
+    .customer-email {
+      font-size: 0.8125rem;
+      color: var(--gray-600);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.625rem;
+      border-radius: 99px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge-card { background: var(--blue-light); color: var(--blue); }
+    .badge-bank { background: var(--orange-light); color: var(--orange); }
+    .badge-cod { background: var(--gray-100); color: var(--gray-600); }
+    .badge-zasilkovna { background: var(--green-light); color: var(--green); }
+    .badge-pickup { background: var(--blue-light); color: var(--blue); }
+
+    .amount {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ── Loading / empty ── */
+    .table-loading, .table-empty {
+      padding: 3rem;
+      text-align: center;
+      color: var(--gray-400);
+      font-style: italic;
+    }
+    .spinner {
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 2px solid var(--gray-200);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-bottom: 0.75rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Detail modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 4px;
+      width: 100%;
+      max-width: 540px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-size: 1rem; font-weight: 700; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--gray-400);
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--black); }
+    .modal-body { padding: 1.5rem; }
+    .detail-section { margin-bottom: 1.5rem; }
+    .detail-section-title {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.375rem;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.375rem 0;
+      font-size: 0.875rem;
+    }
+    .detail-key { color: var(--gray-600); }
+    .detail-value { font-weight: 500; text-align: right; }
+    .detail-total {
+      font-size: 1rem;
+      font-weight: 700;
+      border-top: 1px solid var(--gray-200);
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Nastavení ── */
+    .settings-section {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .settings-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 1rem;
+    }
+    .settings-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .settings-group { flex: 1; min-width: 200px; }
+    .settings-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--gray-600);
+      margin-bottom: 0.375rem;
+    }
+    .settings-input {
+      width: 100%;
+      padding: 0.625rem 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: 2px;
+      font-size: 0.875rem;
+      font-family: monospace;
+      outline: none;
+    }
+    .settings-input:focus { border-color: var(--black); }
+    .settings-save-btn {
+      padding: 0.625rem 1.25rem;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .settings-note {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-top: 0.75rem;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .admin-header { padding: 1rem; }
+      .admin-main { padding: 1rem; }
+      .orders-table { font-size: 0.8125rem; }
+      .orders-table th, .orders-table td { padding: 0.625rem 0.625rem; }
+      .stat-value { font-size: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Pouchie Admin</h1>
+
+<!-- ── Login ── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Pouchie</div>
+    <div class="login-subtitle">Admin přístup</div>
+    <label class="login-label" for="adminPassword">Heslo</label>
+    <input class="login-input" type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+    <button class="login-btn" id="loginBtn">Přihlásit se</button>
+    <div class="login-error" id="loginError">Nesprávné heslo. Zkus to znovu.</div>
+  </div>
+</div>
+
+<!-- ── Admin ── -->
+<div class="admin-screen" id="adminScreen">
+
+  <header class="admin-header">
+    <div class="admin-header-logo">Pouchie</div>
+    <div class="admin-header-right">
+      <span class="admin-header-tag">Admin</span>
+      <button class="logout-btn" id="logoutBtn">Odhlásit</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-label">Celkem objednávek</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tržby celkem</div>
+        <div class="stat-value" id="statRevenue">—</div>
+        <div class="stat-sub">Kč</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Průměrná objednávka</div>
+        <div class="stat-value" id="statAvg">—</div>
+        <div class="stat-sub">Kč</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Dnes</div>
+        <div class="stat-value" id="statToday">—</div>
+        <div class="stat-sub">objednávek</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-title">Objednávky</div>
+      <div class="toolbar-actions">
+        <select class="filter-select" id="filterPayment">
+          <option value="">Všechny platby</option>
+          <option value="card">Kartou</option>
+          <option value="bank">Převodem</option>
+          <option value="cod">Dobírka</option>
+        </select>
+        <select class="filter-select" id="filterShipping">
+          <option value="">Všechny dopravy</option>
+          <option value="zasilkovna">Zásilkovna</option>
+          <option value="osobni">Osobní odběr</option>
+        </select>
+        <button class="refresh-btn" id="refreshBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Obnovit
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabulka -->
+    <div class="table-wrap">
+      <div class="table-loading" id="tableLoading">
+        <div class="spinner"></div>
+        <div>Načítám objednávky…</div>
+      </div>
+      <div class="table-empty" id="tableEmpty" style="display:none;">
+        Žádné objednávky zatím.
+      </div>
+      <table class="orders-table" id="ordersTable" style="display:none;">
+        <thead>
+          <tr>
+            <th>Č. objednávky</th>
+            <th>Datum</th>
+            <th>Zákazník</th>
+            <th>Doprava</th>
+            <th>Platba</th>
+            <th>Celkem</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Nastavení -->
+    <div class="settings-section">
+      <div class="settings-title">⚙ Nastavení Google Sheets</div>
+      <div class="settings-row">
+        <div class="settings-group">
+          <label class="settings-label">Spreadsheet ID</label>
+          <input class="settings-input" type="text" id="sheetId" placeholder="12DkpMAwGll...">
+        </div>
+        <div class="settings-group">
+          <label class="settings-label">Google API Key</label>
+          <input class="settings-input" type="text" id="apiKey" placeholder="AIza...">
+        </div>
+        <button class="settings-save-btn" id="saveSettingsBtn">Uložit & načíst</button>
+      </div>
+      <div class="settings-note">
+        API klíč vytvoříš v Google Cloud Console → APIs → Sheets API → Credentials → API Key. Spreadsheet musí být sdílený jako "Kdokoli s odkazem může zobrazit".
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Detail modal ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Detail objednávky</div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ── Konfigurace ────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = 'pouchie2026'; // Změň si heslo!
+const SHEET_NAME = 'List 1';
+
+// ── State ──────────────────────────────────────────────────────────────────
+let allOrders = [];
+let sheetId = localStorage.getItem('pouchie_sheet_id') || '12DkpMAwGllNFroX9k5MA6ECy86gTsrbuPTqETz5Z_E4';
+let apiKey  = localStorage.getItem('pouchie_api_key') || '';
+
+// ── Selektory ──────────────────────────────────────────────────────────────
+const loginScreen  = document.getElementById('loginScreen');
+const adminScreen  = document.getElementById('adminScreen');
+const loginError   = document.getElementById('loginError');
+const modalOverlay = document.getElementById('modalOverlay');
+
+// ── Auth ───────────────────────────────────────────────────────────────────
+function checkLogin() {
+  return sessionStorage.getItem('pouchie_admin') === 'ok';
+}
+
+function login(password) {
+  if (password === ADMIN_PASSWORD) {
+    sessionStorage.setItem('pouchie_admin', 'ok');
+    showAdmin();
+  } else {
+    loginError.classList.add('visible');
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('pouchie_admin');
+  adminScreen.classList.remove('visible');
+  loginScreen.style.display = 'flex';
+  allOrders = [];
+}
+
+function showAdmin() {
+  loginScreen.style.display = 'none';
+  adminScreen.classList.add('visible');
+  document.getElementById('sheetId').value = sheetId;
+  document.getElementById('apiKey').value = apiKey;
+  loadOrders();
+}
+
+// ── Google Sheets API ──────────────────────────────────────────────────────
+async function loadOrders() {
+  if (!sheetId || !apiKey) {
+    document.getElementById('tableLoading').style.display = 'none';
+    document.getElementById('tableEmpty').style.display = 'block';
+    document.getElementById('tableEmpty').textContent = 'Zadej Spreadsheet ID a Google API Key v nastavení níže.';
+    return;
+  }
+
+  document.getElementById('tableLoading').style.display = 'block';
+  document.getElementById('ordersTable').style.display = 'none';
+  document.getElementById('tableEmpty').style.display = 'none';
+
+  try {
+    const range = encodeURIComponent(`${SHEET_NAME}!A2:L1000`);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error.message);
+
+    const rows = data.values || [];
+    allOrders = rows.map(r => ({
+      date:       r[0] || '',
+      orderNum:   r[1] || '',
+      firstName:  r[2] || '',
+      lastName:   r[3] || '',
+      email:      r[4] || '',
+      phone:      r[5] || '',
+      street:     r[6] || '',
+      city:       r[7] || '',
+      zip:        r[8] || '',
+      shipping:   r[9] || '',
+      payment:    r[10] || '',
+      total:      r[11] || '0'
+    }));
+
+    renderOrders(allOrders);
+    renderStats(allOrders);
+
+  } catch (err) {
+    document.getElementById('tableLoading').style.display = 'none';
+    document.getElementById('tableEmpty').style.display = 'block';
+    document.getElementById('tableEmpty').textContent = `Chyba při načítání: ${err.message}`;
+  }
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  try {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  } catch { return dateStr; }
+}
+
+function paymentBadge(payment) {
+  const map = {
+    card: ['badge-card', 'Kartou'],
+    bank: ['badge-bank', 'Převodem'],
+    cod:  ['badge-cod',  'Dobírka']
+  };
+  const [cls, label] = map[payment] || ['badge-cod', payment];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function shippingBadge(shipping) {
+  if (!shipping) return '—';
+  if (shipping.toLowerCase().includes('zásilkovna') || shipping.toLowerCase().includes('zasilkovna')) {
+    return `<span class="badge badge-zasilkovna">Zásilkovna</span>`;
+  }
+  return `<span class="badge badge-pickup">${shipping}</span>`;
+}
+
+function renderOrders(orders) {
+  const filtered = applyFilters(orders);
+  const tbody = document.getElementById('ordersBody');
+  document.getElementById('tableLoading').style.display = 'none';
+
+  if (filtered.length === 0) {
+    document.getElementById('ordersTable').style.display = 'none';
+    document.getElementById('tableEmpty').style.display = 'block';
+    document.getElementById('tableEmpty').textContent = 'Žádné objednávky odpovídají filtru.';
+    return;
+  }
+
+  document.getElementById('tableEmpty').style.display = 'none';
+  document.getElementById('ordersTable').style.display = 'table';
+
+  // Seřadit od nejnovější
+  const sorted = [...filtered].reverse();
+
+  tbody.innerHTML = sorted.map((o, i) => `
+    <tr>
+      <td><span class="order-number">${o.orderNum || '—'}</span></td>
+      <td>${formatDate(o.date)}</td>
+      <td>
+        <div class="customer-name">${o.firstName} ${o.lastName}</div>
+        <div class="customer-email">${o.email}</div>
+      </td>
+      <td>${shippingBadge(o.shipping)}</td>
+      <td>${paymentBadge(o.payment)}</td>
+      <td><span class="amount">${Number(o.total).toLocaleString('cs-CZ')} Kč</span></td>
+      <td>
+        <button onclick="showDetail(${filtered.length - 1 - i})" style="background:none;border:1px solid #e8e8e8;border-radius:2px;padding:0.25rem 0.625rem;font-size:0.75rem;cursor:pointer;">Detail</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function applyFilters(orders) {
+  const payFilter  = document.getElementById('filterPayment').value;
+  const shipFilter = document.getElementById('filterShipping').value;
+  return orders.filter(o => {
+    if (payFilter && o.payment !== payFilter) return false;
+    if (shipFilter === 'zasilkovna' && !o.shipping.toLowerCase().includes('zásilkovna') && !o.shipping.toLowerCase().includes('zasilkovna')) return false;
+    if (shipFilter === 'osobni' && !o.shipping.toLowerCase().includes('osobn')) return false;
+    return true;
+  });
+}
+
+function renderStats(orders) {
+  const total   = orders.length;
+  const revenue = orders.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const avg     = total ? Math.round(revenue / total) : 0;
+
+  const today = new Date().toDateString();
+  const todayCount = orders.filter(o => {
+    try { return new Date(o.date).toDateString() === today; } catch { return false; }
+  }).length;
+
+  document.getElementById('statTotal').textContent   = total;
+  document.getElementById('statRevenue').textContent = revenue.toLocaleString('cs-CZ');
+  document.getElementById('statAvg').textContent     = avg.toLocaleString('cs-CZ');
+  document.getElementById('statToday').textContent   = todayCount;
+}
+
+// ── Detail modal ───────────────────────────────────────────────────────────
+function showDetail(index) {
+  const o = allOrders[index];
+  if (!o) return;
+
+  const paymentLabel = { card: 'Kartou online', bank: 'Bankovní převod', cod: 'Dobírka' }[o.payment] || o.payment;
+
+  document.getElementById('modalTitle').textContent = `Objednávka ${o.orderNum}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Zákazník</div>
+      <div class="detail-row"><span class="detail-key">Jméno</span><span class="detail-value">${o.firstName} ${o.lastName}</span></div>
+      <div class="detail-row"><span class="detail-key">Email</span><span class="detail-value"><a href="mailto:${o.email}">${o.email}</a></span></div>
+      <div class="detail-row"><span class="detail-key">Telefon</span><span class="detail-value"><a href="tel:${o.phone}">${o.phone}</a></span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Doručovací adresa</div>
+      <div class="detail-row"><span class="detail-key">Ulice</span><span class="detail-value">${o.street}</span></div>
+      <div class="detail-row"><span class="detail-key">Město</span><span class="detail-value">${o.city} ${o.zip}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Objednávka</div>
+      <div class="detail-row"><span class="detail-key">Datum</span><span class="detail-value">${formatDate(o.date)}</span></div>
+      <div class="detail-row"><span class="detail-key">Doprava</span><span class="detail-value">${o.shipping}</span></div>
+      <div class="detail-row"><span class="detail-key">Platba</span><span class="detail-value">${paymentLabel}</span></div>
+      <div class="detail-row detail-total"><span>K zaplacení</span><span>${Number(o.total).toLocaleString('cs-CZ')} Kč</span></div>
+    </div>
+    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+      <a href="mailto:${o.email}?subject=Objednávka ${o.orderNum} – Pouchie" style="flex:1;padding:0.75rem;background:#111;color:#fff;text-align:center;text-decoration:none;border-radius:2px;font-size:0.8125rem;letter-spacing:0.05em;">Napsat email</a>
+      <a href="tel:${o.phone}" style="flex:1;padding:0.75rem;background:#f4f4f4;color:#111;text-align:center;text-decoration:none;border-radius:2px;font-size:0.8125rem;letter-spacing:0.05em;">Zavolat</a>
+    </div>
+  `;
+  modalOverlay.classList.add('open');
+}
+
+// ── Event listenery ────────────────────────────────────────────────────────
+document.getElementById('loginBtn').addEventListener('click', () => {
+  login(document.getElementById('adminPassword').value);
+});
+document.getElementById('adminPassword').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login(e.target.value);
+});
+document.getElementById('logoutBtn').addEventListener('click', logout);
+document.getElementById('refreshBtn').addEventListener('click', loadOrders);
+document.getElementById('modalClose').addEventListener('click', () => modalOverlay.classList.remove('open'));
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); });
+
+document.getElementById('filterPayment').addEventListener('change', () => renderOrders(allOrders));
+document.getElementById('filterShipping').addEventListener('change', () => renderOrders(allOrders));
+
+document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+  sheetId = document.getElementById('sheetId').value.trim();
+  apiKey  = document.getElementById('apiKey').value.trim();
+  localStorage.setItem('pouchie_sheet_id', sheetId);
+  localStorage.setItem('pouchie_api_key', apiKey);
+  loadOrders();
+});
+
+// ── Init ───────────────────────────────────────────────────────────────────
+if (checkLogin()) {
+  showAdmin();
+} else {
+  loginScreen.style.display = 'flex';
+}
+</script>
 </body>
 </html>
